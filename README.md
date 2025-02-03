@@ -10,7 +10,7 @@ f is the flag you use when you have an archive file, and, finally, the name of t
 
 Start the zookeeper:
 
-❯ cd ~/Documents/Projects/kafka/kafka_2.13-3.9.0
+❯ cd ~/kafka/kafka_2.13-3.9.0
 ❯ ./bin/zookeeper-server-start.sh config/zookeeper.properties
 
 We are passing the config file as an argument.
@@ -60,3 +60,7 @@ We need to point out one of the brokers from the cluster by using the --bootstra
 To check if the topic has been successfully created, we can use the list flag with the same script.
 
 ❯ ./bin/kafka-topics.sh --list --bootstrap-server localhost:9093
+
+To delete the topic, we can use the delete flag with the same script.
+
+❯ ./bin/kafka-topics.sh --delete --bootstrap-server localhost:9093 --topic user-tracking

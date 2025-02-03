@@ -4,7 +4,6 @@ package com.pluralsight.kafka.producer;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import com.pluralsight.kafka.producer.model.Event;
@@ -12,7 +11,7 @@ import com.pluralsight.kafka.producer.model.Event;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Main {
+public class Producer {
 
     public static void main(String[] args) throws InterruptedException {
         
@@ -22,7 +21,7 @@ public class Main {
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        Producer<String, String> producer = new KafkaProducer<>(properties);
+        org.apache.kafka.clients.producer.Producer<String, String> producer = new KafkaProducer<>(properties);
 
         for (int i = 0; i <= 10; i++) {
             log.info("Generating event number: " + i);
@@ -52,11 +51,11 @@ public class Main {
         }
     }
 
-    private static String extractValue(Event event) {
+    private static String extractKey(Event event) {
         return event.getUser().getUserId().toString();
     }
             
-    private static String extractKey(Event event) {
+    private static String extractValue(Event event) {
         return String.format("%s, %s, %s", event.getProduct().getType(), event.getProduct().getColor(), event.getProduct().getDesignType());
     }
 
