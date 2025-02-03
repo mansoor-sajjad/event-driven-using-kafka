@@ -41,7 +41,7 @@ Now, we will start the kafka servers (Brokers)
 
 Now, we will create a topic, where we can send information to.
 
-❯ ./bin/kafka-topics.sh --create --bootstrap-server localhost:9093 --partitions 2 --replication-factor 2 --topic user-tracking    2.7.8 13:35:11
+❯ ./bin/kafka-topics.sh --create --bootstrap-server localhost:9093 --partitions 2 --replication-factor 2 --topic user-tracking
 
 We will use the script called kafka-topics, and we need to pass a couple of flags as arguments. 
 
