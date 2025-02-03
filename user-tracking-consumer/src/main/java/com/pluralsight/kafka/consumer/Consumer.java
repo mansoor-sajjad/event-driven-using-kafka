@@ -19,6 +19,10 @@ public class Consumer {
 
         Properties properties = new Properties();
         properties.put("bootstrap.servers", "localhost:9093, localhost:9094");
+
+        // The group.id is useful when we want to share the load of messages across multiple consumers without having to deal with duplicate messages.
+        // Each consumer should be a part of a consumer group.
+        // If multiple consumers are part of the same consumer group, then they will share their load of messages, and they will act as a single consumer.
         properties.put("group.id", "user-tracking-consumer");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
