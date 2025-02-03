@@ -5,6 +5,8 @@ import static java.util.Arrays.asList;
 import java.time.Duration;
 import java.util.Properties;
 
+import com.pluralsight.kafka.model.Product;
+import com.pluralsight.kafka.model.User;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
@@ -26,13 +28,15 @@ public class Consumer {
         properties.put("group.id", "user-tracking-consumer");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        properties.put("specific.avro.reader", "true"); // Must be set to true, in order to cast the record to the correct type.
+        properties.put("schema.registry.url", "http://localhost:8081");
 
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
+        KafkaConsumer<User, Product> consumer = new KafkaConsumer<>(properties);
 
         // The same consumer can subscribe to multiple topics, but in this case we are
         // only interested in the user-tracking topic.
         // so we need to implement the logic to process the messages from this topic.
-        consumer.subscribe(asList("user-tracking"));
+        consumer.subscribe(asList("user-tracking-avro"));
 
 
         // A pull operation will only happen once, so in order to keep the application running, 
@@ -44,7 +48,7 @@ public class Consumer {
             // connection open with the broker and receives the record.
             // After the duration is passed, we are able to access the consumer records and
             // process them.
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+            ConsumerRecords<User, Product> records = consumer.poll(Duration.ofMillis(100));
 
             records.forEach(record -> {
                 log.info("Consuming record: " + record);

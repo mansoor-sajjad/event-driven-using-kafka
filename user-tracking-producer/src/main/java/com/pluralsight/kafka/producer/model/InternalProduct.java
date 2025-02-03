@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Product {
+public class InternalProduct {
 
     private Color color;
 

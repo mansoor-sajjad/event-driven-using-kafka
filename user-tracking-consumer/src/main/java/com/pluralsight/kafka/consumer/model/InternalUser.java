@@ -13,9 +13,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class InternalUser {
 
-    public User(UserId userId) {
+    public InternalUser(UserId userId) {
         this.userId = userId;
         this.preferences = new ArrayList<>();
         this.suggestions = new ArrayList<>();

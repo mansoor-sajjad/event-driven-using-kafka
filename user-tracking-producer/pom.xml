@@ -33,6 +33,22 @@
                     <mainClass>com.pluralsight.kafka.producer.Producer</mainClass>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                    <outputDirectory>${project.basedir}/target/generated-sources/avro</outputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -62,5 +78,12 @@
             <artifactId>kafka-clients</artifactId>
             <version>2.3.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.11.3</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -1,8 +1,11 @@
 package com.pluralsight.kafka.producer;
 
 
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.Properties;
 
+import com.pluralsight.kafka.model.*;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
@@ -18,20 +21,21 @@ public class Producer {
         EventGenerator eventGenerator = new EventGenerator();
         Properties properties = new Properties();
         properties.put("bootstrap.servers", "localhost:9093, localhost:9094");
-        properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        properties.put("key.serializer", "org.apache.kafka.common.serialization.KafkaAvroSerializer");
+        properties.put("value.serializer", "org.apache.kafka.common.serialization.KafkaAvroSerializer");
+        properties.put("schema.registry.url", "http://localhost:8081");
 
-        org.apache.kafka.clients.producer.Producer<String, String> producer = new KafkaProducer<>(properties);
+        org.apache.kafka.clients.producer.Producer<User, Product> producer = new KafkaProducer<>(properties);
 
         for (int i = 0; i <= 10; i++) {
             log.info("Generating event number: " + i);
 
             Event event = eventGenerator.generateEvent();
 
-            String key = extractKey(event);
-            String value = extractValue(event);
+            User key = extractKey(event);
+            Product value = extractValue(event);
 
-            ProducerRecord<String, String> record = new ProducerRecord<>("user-tracking", key, value);
+            ProducerRecord<User, Product> record = new ProducerRecord<>("user-tracking-avro", key, value);
             log.info("Producing the record to kafka: " + event);
 
             log.info("Producing the record to Kafka wit key: " + key + ":" + value);
@@ -51,12 +55,20 @@ public class Producer {
         }
     }
 
-    private static String extractKey(Event event) {
-        return event.getUser().getUserId().toString();
+    private static User extractKey(Event event) {
+        return User.newBuilder()
+                .setUserId(event.getInternalUser().getUserId().toString())
+                .setUsername(event.getInternalUser().getUsername())
+                .setDateOfBirth((int)event.getInternalUser().getDateOfBirth().toInstant().atZone(ZoneId.systemDefault()).getLong(ChronoField.EPOCH_DAY))
+                .build();
     }
-            
-    private static String extractValue(Event event) {
-        return String.format("%s, %s, %s", event.getProduct().getType(), event.getProduct().getColor(), event.getProduct().getDesignType());
+
+    private static Product extractValue(Event event) {
+        return Product.newBuilder()
+                .setProductType(ProductType.valueOf(event.getInternalProduct().getType().name()))
+                .setColor(Color.valueOf(event.getInternalProduct().getColor().name()))
+                .setDesignType(DesignType.valueOf(event.getInternalProduct().getDesignType().name()))
+                .build();
     }
 
 }

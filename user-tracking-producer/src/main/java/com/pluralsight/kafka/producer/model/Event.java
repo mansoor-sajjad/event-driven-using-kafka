@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 public class Event {
 
-    private User user;
+    private InternalUser internalUser;
 
-    private Product product;
+    private InternalProduct internalProduct;
 
 }

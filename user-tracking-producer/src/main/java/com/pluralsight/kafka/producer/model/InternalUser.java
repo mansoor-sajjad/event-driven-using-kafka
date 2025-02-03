@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class User {
+public class InternalUser {
 
     private UserId userId;
 
